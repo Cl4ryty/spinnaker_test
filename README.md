@@ -6,8 +6,11 @@
 - create a new environment and install pip in it with `conda create -n env_name pip`, substituting env_name with a name of your liking
 - activate the environment `conda activate env_name`
 - navigate into the cloned repo
-- install the required libraries with `pip install -r requirements.txt`
-- run the `toolbox_test` to train the ann and convert it with the snn toolbox -> `python LibraryTests/toolbox_test.py`
+- Testing the SNN toolbox:
+  - install the required libraries with `pip install -r requirements.txt`
+  - run the `toolbox_test` to train the ann and convert it with the snn toolbox -> `python LibraryTests/toolbox_test.py`
+- Running the ANN / adding DEs:
+  -  no requirements.txt provided at the moment, just run it and install the missing packages it complains about
 
 ## Implementiing DEs for the ANN to solve
 `run_ann_des.py` contains the class for simple implementation of DEs as well as some already implemented DEs as examples and the (not completely finished) code to train the ANN to solve the equations.
