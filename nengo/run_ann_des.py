@@ -90,26 +90,78 @@ class DE:
 
 equations = []
 
-test_de = DE(input_min=-2., input_max=2., eq=lambda df_dx, f, x: df_dx + 2. * x * f, order=1, ic_x=0, ic_y=1, solution=lambda x: tf.exp(-inputs**2))
+test_de = DE(name="test_de", input_min=-2., input_max=2., eq=lambda df_dx, f, x: df_dx + 2. * x * f, order=1, ic_x=[0], ic_y=[1], solution=lambda x: tf.exp(-inputs**2))
 equations.append(test_de)
 
-# Solution missing for this test
-R = 1.
-test_de1 = DE(input_min=0., input_max=1., eq=lambda df_dx, f, x: df_dx - R * x * (1 - x), order=1, ic_x=0, ic_y=1, solution=lambda x: None)
-equations.append(test_de1)
+# # Solution missing for this test
+# R = 1.
+# test_de1 = DE(input_min=0., input_max=1., eq=lambda df_dx, f, x: df_dx - R * x * (1 - x), order=1, ic_x=0, ic_y=1, solution=lambda x: None)
+# equations.append(test_de1)
 
-logistic_equation = DE(input_min=-2., input_max=2., eq=lambda df_dx, f, x: df_dx - f * (1-f), order=1, ic_x=0, ic_y=0.5, solution=lambda x: tf.sigmoid(x))
+# non-linear bernouulli
+logistic_equation = DE(input_min=-2., input_max=2., eq=lambda df_dx, f, x: df_dx - f * (1-f), order=1, ic_x=[0], ic_y=[0.5], solution=lambda x: tf.sigmoid(x))
 equations.append(logistic_equation)
 
 
-# linear second order
-# Simple Harmonic Motion (of spring) / Newton's Second Law
-m = 10.
-k = 1.
-newtons_second = DE(input_min=-2., input_max=2., eq=lambda df_dx, df_dxx, f, x: m*df_dxx + k*f, order=2, ic_x=0, ic_y=1, solution=lambda x: None)
-equations.append(newtons_second)
+# # linear second order
+# # Simple Harmonic Motion (of spring) / Newton's Second Law
+# m = 10.
+# k = 1.
+# newtons_second = DE(input_min=-2., input_max=2., eq=lambda df_dx, df_dxx, f, x: m*df_dxx + k*f, order=2, ic_x=0, ic_y=1, solution=lambda x: None)
+# equations.append(newtons_second)
+
+# # Kirchhoff’s law
+# # dürfte keinen Sinn ergeben, da zwei verschränkte Gleichungen verwendet werden: E(t) & I(t)
+# # pürfen, ob Ergebnis plausibel
+# L = 4
+# R = 12
+# E_t = 60
+# kirchhoff = DE(input_min=-2., input_max=2., eq=lambda dI_dt, I, t: L * dI_dt + R * I - E_t, order=1, ic_x=1, ic_y=4.75, solution=lambda x: tf.exp(-inputs**2))
+# equations.append(kirchhoff)
+
+# # Newtons first Law of cooling
+# # auch hier sind zu viele Bedingungen zu erfüllen
+# # richtige Lösung wird nicht angezeigt
+# k = 0.092
+# M = 25
+# C = 4.36
+# t = 6
+# newtons_first = DE(input_min=-2., input_max=2., eq=lambda dT, k, M, T: dT - k * M + k * T, order=1, ic_x=0, ic_y=1, solution=lambda dT, k, M, T: M - (tf.exp(-C) * tf.exp(-k * t)))
+# equations.append(newtons_first)
+
+# x^2y′′+3xy′+4y=0
+# defintionylücke bei y(0)
+c_1 = 5
+c_2 = 3
+second_order = DE(name="second_order", input_min=-2., input_max=2., eq=lambda dy_dx, dy_dxx, y, x: x * tf.math.pow(x, 2 * dy_dxx) + 3 * x * dy_dx + 4 * y, order=2, ic_x=[1, 2.476632271], ic_y=[5, 0.4037741136], solution=lambda x: c_1 * (1 / x) * tf.math.cos(tf.sqrt(3)*tf.math.log(x))+ c_2 * (1/x) * tf.math.sin(tf.sqrt(3)*tf.math.log(x)) - y)
+equations.append(second_order)
+
+#prüfen, ob funktioniert wegen t
+# t undefiniert, könnte zu Probemen führen. sind aber atsächlich  gleicvhverteielte t-Werte
+second_2 = DE(name="second_2", input_min=-2., input_max=2., eq=lambda df_dxx, df_dx, x, t: df_dxx + x, order=2, ic_x=[0, 0.6366197724], ic_y=[1, 1], solution=lambda x: tf.cos(t) + sin(t) - x)
+equations.append(second_2)
 
 
+# third_order, y''' - 9y'' + 15y' + 25y = 0
+# x undefiniert, könnte zu Probemen führen. sind aber atsächlich  gleicvhverteielte x-Werte
+third_order = DE(name="third_order", input_min=0., input_max=1., eq=lambda dy_dt, dy_dtt, dy_dttt, y : dy_dttt - 9* dy_dtt + 15 * dy_dt + 25 * y, order=3, ic_x=[0, 1, -1], ic_y=[3, 297.1941976, 2.718281828], solution=lambda dy_dt, dy_dtt, dy_dttt, y, x:  tf.math.exp(-x) + tf.math.exp(5 * x) + x *  tf.math.exp(5 * x) - y)
+equations.append(third_order)
+
+# third_order_2, y'''+y''-2y=e^x(14+34x+15x^2)
+# x undefiniert, könnte zu Probemen führen. sind aber atsächlich  gleicvhverteielte x-Werte
+third_order_2 = DE(name="third_order_2", input_min=0., input_max=1., eq=lambda dy_dt, dy_dtt, dy_dttt, y, x : dy_dttt + dy_dtt - 2 * y - tf.math.exp(14 + 34 * x + 15 * tf.math.pow(x, 2)), order=3, ic_x=[0, 1.570796327, 1], ic_y=[2, 35.53210822, 8.529089278], solution=lambda dy_dt, dy_dtt, dy_dttt, y, x:  tf.math.exp(x) + math.exp((-x)) * (tf.math.cos(c) + tf.math.sind(x)) + math.exp(x) * (tf.math.pow(x, 2) + tf.math.pow(x, 3))  - y)
+equations.append(third_order_2)
+
+
+# nonline y' = x(y^3) where y(0)=2
+nonline = DE(name="nonline", input_min=-2., input_max=2., eq=lambda df_dx, y, x: x * tf.math.pow(y, 3) - y, order=1, ic_x=[0], ic_y=[2], solution=lambda df_dx, y, x: tf.math.pow((1/4 - tf.math.pow(x, 2)), -0.5) - y)
+equations.append(nonline)
+
+
+# third_order_nonlin, y′′′+(y′)^2−yy′′=0 
+# x undefiniert, könnte zu Probemen führen. sind aber atsächlich  gleicvhverteielte x-Werte
+third_order_nonlin = DE(name="third_order_nonlin", input_min=0., input_max=1., eq=lambda dy_dt, dy_dtt, dy_dttt, y, x : dy_dttt + tf.math.pow(dy_dt, 2) - y * dy_dtt, order=3, ic_x=[0, 1, 2], ic_y=[1, 2.08616127, 6.524391382], solution=lambda dy_dt, dy_dtt, dy_dttt, y, x:  tf.math.exp(x) + math.exp(-x) -1  - y)
+equations.append(third_order_nonlin)
 
 
 for de in equations:
