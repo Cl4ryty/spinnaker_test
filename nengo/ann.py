@@ -17,6 +17,7 @@ class Model(tf.keras.Model):
 
                            ]
 
+    @tf.function
     def call(self, x):
         for layer in self.layer_list:
             x = layer(x)

@@ -46,6 +46,7 @@ class DE:
 
     def __make_ann_loss_func(self):
 
+        @tf.function
         def ann_loss_function(y_pred, y_true):
             x = y_true
             with tf.GradientTape() as tape4:
@@ -126,13 +127,13 @@ M = 25
 C = 4.36
 newtons_first = DE(name="newtons_first", input_min=-2., input_max=2.,
                    eq=lambda dT, T, x: dT - k * M + k * T,
-                   order=1, ic_x=[0], ic_y=[1],
+                   order=1, ic_x=[0.], ic_y=[24.98722161],
                    solution=lambda x: M - (tf.exp(-C) * tf.exp(-k * x)) )
 equations.append(newtons_first)
 
 # # ---------------------   second order   ----------------------------
 
-# Simple Harmonic Motion (of spring) / Newton's Second Law
+# Simple Harmonic Motion (of spring) / Newton's Second Lawt
 # TODO: check ic
 m = 1./16.
 k1 = 4.
@@ -143,10 +144,16 @@ newtons_second_law = DE(name="newtons_second_law", input_min=-2., input_max=2.,
 equations.append(newtons_second_law)
 
 # x^2y′′+3xy′+4y=0
-# Defintionslücke bei y(0) #TODO: then why use an input range containing 0??
+# Defintionslücke bei y(0)
 c_1 = 5
 c_2 = 3
-second_order_euler = DE(name="second_order_euler", input_min=-2., input_max=2.,
+second_order_euler_test = DE(name="second_order_euler_test", input_min=-2., input_max=2.,
+                  eq=lambda dy_dx, dy_dxx, y, x: tf.math.pow(x, 2) * dy_dxx + 3 * x * dy_dx + 4 * y,
+                  order=2, ic_x=[1, 2.476632271], ic_y=[5, 0.4037741136],
+                  solution=lambda x: c_1 * (1. / x) * tf.math.cos(tf.sqrt(3.)*tf.math.log(x))+ c_2 * (1./x) * tf.math.sin(tf.sqrt(3.)*tf.math.log(x)))
+equations.append(second_order_euler_test)
+
+second_order_euler = DE(name="second_order_euler", input_min=2., input_max=6.,
                   eq=lambda dy_dx, dy_dxx, y, x: tf.math.pow(x, 2) * dy_dxx + 3 * x * dy_dx + 4 * y,
                   order=2, ic_x=[1, 2.476632271], ic_y=[5, 0.4037741136],
                   solution=lambda x: c_1 * (1. / x) * tf.math.cos(tf.sqrt(3.)*tf.math.log(x))+ c_2 * (1./x) * tf.math.sin(tf.sqrt(3.)*tf.math.log(x)))
