@@ -27,7 +27,12 @@ dense = tf.keras.layers.Dense(units=1, activation="relu",
 
 model = tf.keras.Model(inputs=inp, outputs=dense)
 
-converter = nengo_dl.Converter(model)
+# converter = nengo_dl.Converter(model)
+converter = nengo_dl.Converter(
+    model,
+    swap_activations={tf.nn.relu: tf.nn.relu,
+                      tf.nn.sigmoid: tf.nn.sigmoid},
+)
 
 inputs = tf.linspace(-2., 2., num=400)
 # expand dims 2 times as nengo expects the input to have the shape (batch_size, n_steps, node.size_out)
@@ -67,6 +72,8 @@ with nengo_dl.Simulator(converter.net, minibatch_size=400) as sim:
     tf.keras.utils.plot_model(sim.keras_model, to_file=dot_img_file, show_shapes=True, show_layer_names=True)
     dot_img_file = 'model_original.png'
     tf.keras.utils.plot_model(model, to_file=dot_img_file, show_shapes=True)
+    dot_img_file = 'tensor_graph.png'
+    tf.keras.utils.plot_model(sim.tensor_graph, to_file=dot_img_file, show_shapes=True)
 
     sim.fit(
         {converter.inputs[inp]: inputs},
