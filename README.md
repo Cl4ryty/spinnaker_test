@@ -14,7 +14,7 @@
   - navigate into the cloned repo
   - install the required libraries with `pip install -r requirements.txt`
   - finish setting up the spinnaker library by running `python -m spynnaker8.setup_pynn`
-  - you might have to edit the `.spynnaker.cfg` file that should be located in your home directory (if it does not exist yet it will be created after running the code once) – setting `virtual_board = True` and setting the `width` and `height` to allowed values (e.g. 2)
+  - you might have to edit the `.spynnaker.cfg` file that should be located in your home directory (if it does not exist yet it will be created after running the code once) – setting `virtual_board = True` and setting the `width` and `height` to allowed values (e.g. 2) – see https://spinnakermanchester.github.io/spynnaker/5.0.0/PyNNOnSpinnakerInstall.html#Configuration for more information
   
 ### Testing the SNN toolbox:
   - create a new environment and install pip in it with `conda create -n env_name pip`, substituting env_name with a name of your liking
