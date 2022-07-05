@@ -3,6 +3,7 @@
 - the code to train the ANN, store the results, and run the conversion with SNN toolbox (but using INI simulator) is in `run_ann_training.py"
 - the code cannot currently succesfully run on other machines as the code for the snn toolbox has to be modified for this to work
 - results are in `temp/`, each subfolder is one run, ideally the plots are in a subfolder of those called plots (not the case for all runs, as it was not implemented for the first few runs), collected metrics are stored in `metrics.txt`, hyperparameters used in `hyperparameters.txt`, and activations used for the NN layers in `activations.txt`. Not all files might be available for the first runs.
+- order of collected metrics in `metrics.txt`: de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, total_training_time
 
 
 
