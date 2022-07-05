@@ -467,7 +467,7 @@ for i, de in enumerate(equations):
     plt.legend()
 
     figname = de.name + "__loss.png"
-    plt.savefig(os.path.join(path_wd, "plots/", figname))
+    plt.savefig(os.path.join(path_wd, "plots", figname))
     plt.show()
 
     # plot result
@@ -481,7 +481,7 @@ for i, de in enumerate(equations):
         plt.legend()
 
         figname = de.name + "__error.png"
-        plt.savefig(os.path.join(path_wd, "plots/", figname))
+        plt.savefig(os.path.join(path_wd, "plots", figname))
         plt.show()
 
     # plot the model's approximation and the actual solution
@@ -496,7 +496,7 @@ for i, de in enumerate(equations):
     plt.title(de.name)
 
     figname = de.name + "__solution.png"
-    plt.savefig(os.path.join(path_wd, "plots/", figname))
+    plt.savefig(os.path.join(path_wd, "plots", figname))
     plt.show()
 
     # print and store the dictionary with the loss functions
