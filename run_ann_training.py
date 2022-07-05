@@ -156,7 +156,7 @@ gompertz = DE(name="gompertz", input_min=-2., input_max=2.,
               eq=lambda df_dx, f, x: f * (a - b * tf.math.log(f)),
               order=1, ic_x=[0.], ic_y=[np.e],
               solution=lambda x: tf.exp(1.))
-equations.append(gompertz)
+# equations.append(gompertz)
 
 # Kirchhoff’s law
 # dürfte keinen Sinn ergeben, da zwei verschränkte Gleichungen verwendet werden: E(t) & I(t)
@@ -168,7 +168,7 @@ kirchhoff = DE(name="kirchhoff", input_min=-0.5, input_max=0.5,
                eq=lambda dI_dt, I, t: L * dI_dt + R * I - E_t,
                order=1, ic_x=[1.], ic_y=[4.75],
                solution=lambda x: 5 * (1 - tf.exp(-3 * x)))
-equations.append(kirchhoff)
+# equations.append(kirchhoff)
 
 # Newtons first Law of cooling
 # auch hier sind zu viele Bedingungen zu erfüllen
@@ -180,7 +180,7 @@ newtons_first = DE(name="newtons_first", input_min=-2., input_max=2.,
                    eq=lambda dT, T, x: dT - k * M + k * T,
                    order=1, ic_x=[0.], ic_y=[24.98722161],
                    solution=lambda x: M - (tf.exp(-C) * tf.exp(-k * x)))
-equations.append(newtons_first)
+# equations.append(newtons_first)
 
 # # ---------------------   second order   ----------------------------
 
@@ -191,7 +191,7 @@ newtons_second_law = DE(name="newtons_second_law", input_min=-2., input_max=2.,
                         eq=lambda df_dx, df_dxx, f, x: m * df_dxx + k1 * f,
                         order=2, ic_x=[1.], ic_y=[-0.278346201920130888224993],
                         solution=lambda x: -2 * tf.sin(8 * x))
-equations.append(newtons_second_law)
+# equations.append(newtons_second_law)
 
 # x^2y′′+3xy′+4y=0
 # Defintionslücke bei y(0)
@@ -202,27 +202,27 @@ second_order_euler_test = DE(name="second_order_euler_test", input_min=-2., inpu
                              eq=lambda dy_dx, dy_dxx, y, x: tf.math.pow(x, 2) * dy_dxx + 3 * x * dy_dx + 4 * y,
                              order=2, ic_x=[1, 2.476632271], ic_y=[5, 0.4037741136],
                              solution=lambda x: c_1 * (1. / x) * tf.math.cos(tf.sqrt(3.) * tf.math.log(x)) + c_2 * (
-                                         1. / x) * tf.math.sin(tf.sqrt(3.) * tf.math.log(x)))
-equations.append(second_order_euler_test)
+                                     1. / x) * tf.math.sin(tf.sqrt(3.) * tf.math.log(x)))
+# equations.append(second_order_euler_test)
 
 second_order_euler = DE(name="second_order_euler", input_min=2., input_max=6.,
                         eq=lambda dy_dx, dy_dxx, y, x: tf.math.pow(x, 2) * dy_dxx + 3 * x * dy_dx + 4 * y,
                         order=2, ic_x=[1, 2.476632271], ic_y=[5, 0.4037741136],
                         solution=lambda x: c_1 * (1. / x) * tf.math.cos(tf.sqrt(3.) * tf.math.log(x)) + c_2 * (
-                                    1. / x) * tf.math.sin(tf.sqrt(3.) * tf.math.log(x)))
-equations.append(second_order_euler)
+                                1. / x) * tf.math.sin(tf.sqrt(3.) * tf.math.log(x)))
+# equations.append(second_order_euler)
 
 second_1 = DE(name="second_1", input_min=-2., input_max=2.,
               eq=lambda df_dx, df_dxx, f, x: 3 * ((x + 6.) ** 2.) * df_dxx + 25 * (x + 6.) * df_dx - 16 * f,
               order=2, ic_x=[-5., -4.], ic_y=[2, 1.591307302],
               solution=lambda x: tf.abs(x + 6.) ** (2. / 3.) + tf.abs(x + 6.) ** (-8.))
-equations.append(second_1)
+# equations.append(second_1)
 
 second_2 = DE(name="second_2", input_min=-2., input_max=2.,
               eq=lambda df_dx, df_dxx, x, t: df_dxx + x,
               order=2, ic_x=[0, 0.6366197724], ic_y=[1, 1],
               solution=lambda t: tf.cos(t) + tf.sin(t))
-equations.append(second_2)
+# equations.append(second_2)
 
 # # ------------------   third order ---------------------------
 
@@ -232,7 +232,7 @@ third_order = DE(name="third_order", input_min=0., input_max=1.,
                  eq=lambda dy_dt, dy_dtt, dy_dttt, y, x: dy_dttt - 9 * dy_dtt + 15 * dy_dt + 25 * y,
                  order=3, ic_x=[0, 1, -1], ic_y=[3, 297.1941976, 2.718281828],
                  solution=lambda x: tf.math.exp(-x) + tf.math.exp(5 * x) + x * tf.math.exp(5 * x))
-equations.append(third_order)
+# equations.append(third_order)
 
 # third_order_2, y'''+y''-2y=e^x(14+34x+15x^2)
 third_order_2 = DE(name="third_order_2", input_min=0., input_max=1.,
@@ -240,16 +240,16 @@ third_order_2 = DE(name="third_order_2", input_min=0., input_max=1.,
                        14 + 34 * x + 15 * tf.math.pow(x, 2)),
                    order=3, ic_x=[0, 1.570796327, 1], ic_y=[2, 35.53210822, 8.529089278],
                    solution=lambda x: tf.math.exp(x) + tf.math.exp((-x)) * (
-                               tf.math.cos(x) + tf.math.sin(x)) + tf.math.exp(x) * (
-                                                  tf.math.pow(x, 2) + tf.math.pow(x, 3)))
-equations.append(third_order_2)
+                           tf.math.cos(x) + tf.math.sin(x)) + tf.math.exp(x) * (
+                                              tf.math.pow(x, 2) + tf.math.pow(x, 3)))
+# equations.append(third_order_2)
 
 # third_order_3 y''' + y'' - 6y' + 4y = 0
 third_order_3 = DE(name="third_order_3", input_min=0., input_max=1.,
                    eq=lambda dy_dt, dy_dtt, dy_dttt, y, x: dy_dttt + dy_dtt - 6 * dy_dt + 4 * y,
                    order=3, ic_x=[0, 1, 2], ic_y=[3, 6.199652613, 19.23832807],
                    solution=lambda x: tf.math.exp(x) + tf.math.exp((1.236067977) * x) + tf.math.exp((-3.236067977) * x))
-equations.append(third_order_3)
+# equations.append(third_order_3)
 
 # ###########################   nonlinear   #################################
 # # ------------------------   first order   ---------------------------------
@@ -260,14 +260,39 @@ logistic_equation = DE(name="logistic_equation", input_min=-2., input_max=2.,
                        eq=lambda df_dx, f, x: df_dx - k2 * f * (1 - f / L2),
                        order=1, ic_x=[0], ic_y=[50],
                        solution=lambda x: 900 / (17 * tf.exp(-0.07 * x)))
-equations.append(logistic_equation)
+# equations.append(logistic_equation)
 
 # nonlinear y' = x(y^3) where y(0)=2
 nonlinear = DE(name="nonlinear", input_min=-2., input_max=2.,
                eq=lambda df_dx, y, x: df_dx - x * tf.math.pow(y, 3),
                order=1, ic_x=[0], ic_y=[2],
                solution=lambda x: tf.math.pow((1 / 4 - tf.math.pow(x, 2)), -0.5))
-equations.append(nonlinear)
+# equations.append(nonlinear)
+
+## ------------------------   second order   ------------------------------------
+
+# TODO add solution
+# Painlevé II transcendent: w'' = 2w^3 + zw + α
+alpha = 3.
+painleve_2_transcendent = DE(name="painleve_2_transcendent", input_min=-2., input_max=2.,
+               eq=lambda df_dx, df_dxx, y, x: 2 * (y**3) + x*y + alpha,
+               order=2, ic_x=[4.7], ic_y=[0],
+               solution=lambda x:None)
+# equations.append(painleve_2_transcendent)
+
+second_order_nonlinear = DE(name="second_order_nonlinear", input_min=-2., input_max=2.,
+               eq=lambda df_dx, df_dxx, f, x: -2. * x * (df_dx ** 2),
+               order=2, ic_x=[0], ic_y=[2],
+               solution=lambda x: 0.5 * (tf.math.log(tf.abs(x - 1.)) - tf.math.log(tf.abs(x + 1.))) + 2.)
+# equations.append(second_order_nonlinear)
+
+# TODO: check ic
+mu = 1.
+van_der_pol = DE(name="van_der_pol", input_min=0., input_max=2,
+                 eq=lambda dfdt, dfdtt, x, t: dfdtt - mu*(1-x**2)*dfdt + x,
+                 order=2, ic_x=[0], ic_y=[2.],
+                 solution=lambda x:None)
+# equations.append(van_der_pol)
 
 # # ------------------------   third order   -----------------------------------
 
@@ -277,7 +302,7 @@ third_order_nonlin = DE(name="third_order_nonlin", input_min=0., input_max=1.,
                         eq=lambda dy_dt, dy_dtt, dy_dttt, y, x: dy_dttt + tf.math.pow(dy_dt, 2) - y * dy_dtt,
                         order=3, ic_x=[0, 1, 2], ic_y=[1, 2.08616127, 6.524391382],
                         solution=lambda x: tf.math.exp(x) + tf.math.exp(-x) - 1)
-equations.append(third_order_nonlin)
+# equations.append(third_order_nonlin)
 
 # third_order_v2, x^3(u''') - 3x^2(u'') + 7x(u') - 8u = f, while f = x^2/(1+ (ln|x|)^2), and f(0) = 0
 A = 2
@@ -285,16 +310,16 @@ B = 2
 C1 = 2
 third_order_v2 = DE(name="third_order_v2", input_min=0., input_max=1.,
                     eq=lambda du_dx, du_dxx, du_dxxx, u, x: tf.math.pow(x, 3) * du_dxxx - 3 * (
-                                x ** 2) * du_dxx + 7 * du_dx - 8 * u,
+                            x ** 2) * du_dxx + 7 * du_dx - 8 * u,
                     order=3, ic_x=[0, 1, 3], ic_y=[0, 2, 26.188934797822288],
                     solution=lambda x: (
-                                A + B * tf.math.log(x) + C1 * (tf.math.log(x) ** 2) * (x ** 2) - ((x ** 2) / 2) * (
-                                    (1 - (tf.math.log(x)) ** 2) * tf.math.atan(tf.math.log(x)) + tf.math.log(
-                                x) * tf.math.log((1 + (tf.math.log(x)) ** 2) - (tf.math.log(x))))))
-equations.append(third_order_v2)
+                            A + B * tf.math.log(x) + C1 * (tf.math.log(x) ** 2) * (x ** 2) - ((x ** 2) / 2) * (
+                            (1 - (tf.math.log(x)) ** 2) * tf.math.atan(tf.math.log(x)) + tf.math.log(
+                        x) * tf.math.log((1 + (tf.math.log(x)) ** 2) - (tf.math.log(x))))))
+# equations.append(third_order_v2)
 
 # set the hyperparameters
-epochs = 10000
+epochs = 200
 learning_rate = 0.01
 loss_threshold = 0.00001
 
@@ -330,7 +355,6 @@ np.savetxt(os.path.join(path_wd, "hyperparameters.txt"), hyperparameters, fmt="%
 
 rmse = tf.keras.metrics.RootMeanSquaredError()
 
-
 for i, de in enumerate(equations):
     print("\n\nWorking on " + de.name + ", equation", i, "of", len(equations) - 1)
     # save the loss function in the dict
@@ -346,20 +370,20 @@ for i, de in enumerate(equations):
 
     # initialize the model and optimizer
     ns = 10
-    model = tf.keras.Sequential([tf.keras.layers.Dense(units=ns, activation=tf.nn.tanh,
+    model = tf.keras.Sequential([tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
                                                        kernel_initializer=tf.random_normal_initializer(seed=seed),
                                                        bias_initializer=tf.random_normal_initializer(seed=seed),
                                                        name="first",
                                                        input_shape=(1,)),
-                                 tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
-                                                       kernel_initializer=tf.random_normal_initializer(seed=seed),
-                                                       bias_initializer=tf.random_normal_initializer(seed=seed),
-                                                       name="second"),
                                  tf.keras.layers.Dense(units=ns, activation=tf.nn.tanh,
                                                        kernel_initializer=tf.random_normal_initializer(seed=seed),
                                                        bias_initializer=tf.random_normal_initializer(seed=seed),
+                                                       name="second"),
+                                 tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
+                                                       kernel_initializer=tf.random_normal_initializer(seed=seed),
+                                                       bias_initializer=tf.random_normal_initializer(seed=seed),
                                                        name="third"),
-                                 tf.keras.layers.Dense(units=1, activation=tf.nn.relu,
+                                 tf.keras.layers.Dense(units=1, activation=tf.keras.activations.linear,
                                                        kernel_initializer=tf.random_normal_initializer(seed=seed),
                                                        bias_initializer=tf.random_normal_initializer(seed=seed),
                                                        name="fourth")
@@ -434,17 +458,31 @@ for i, de in enumerate(equations):
     # plot result
     mpl.rcParams.update(mpl.rcParamsDefault)
     plt.figure()
-    plt.plot(train_losses, label="loss")
-    if train_errors:
-        plt.plot(train_errors, label="RMSE")
+    plt.plot(train_losses)
+    # if train_errors:
+    #     plt.plot(train_errors, label="RMSE")
     plt.xlabel("Training steps")
-    plt.ylabel("Loss/Error")
+    plt.ylabel("Loss")
     plt.title(de.name)
     plt.legend()
 
-    figname = de.name + "__loss_error.png"
+    figname = de.name + "__loss.png"
     plt.savefig(os.path.join(path_wd, "plots/", figname))
     plt.show()
+
+    # plot result
+    if train_errors:
+        mpl.rcParams.update(mpl.rcParamsDefault)
+        plt.figure()
+        plt.plot(train_errors)
+        plt.xlabel("Training steps")
+        plt.ylabel("RMSE")
+        plt.title(de.name)
+        plt.legend()
+
+        figname = de.name + "__error.png"
+        plt.savefig(os.path.join(path_wd, "plots/", figname))
+        plt.show()
 
     # plot the model's approximation and the actual solution
     approx = model(x)
@@ -458,7 +496,7 @@ for i, de in enumerate(equations):
     plt.title(de.name)
 
     figname = de.name + "__solution.png"
-    plt.savefig(os.path.join(path_wd, "plots/",figname))
+    plt.savefig(os.path.join(path_wd, "plots/", figname))
     plt.show()
 
     # print and store the dictionary with the loss functions
@@ -483,11 +521,14 @@ for i, de in enumerate(equations):
 
     config['tools'] = {
         'evaluate_ann': True,  # Test ANN on dataset before conversion.
-        'normalize': False  # Normalize weights for full dynamic range.
+        'parse': True,
+        'normalize': False,
+        'convert': True,
+        'simulate': False
     }
 
     config['simulation'] = {
-        'simulator': 'INI',  # Chooses execution backend of SNN toolbox.
+        'simulator': 'spiNNaker',  # Chooses execution backend of SNN toolbox.
         'duration': 50,  # Number of time steps to run each sample.
         'num_to_test': input_size,  # How many test samples to run.
         'batch_size': input_size,  # Batch size for simulation.
@@ -496,6 +537,10 @@ for i, de in enumerate(equations):
 
     config['input'] = {
         'model_lib': 'keras'  # Input model is defined in pytorch.
+    }
+
+    config['cell'] = {
+        'v_thresh': 0.01  # Should be 0.01 for optimal correspondences between original ANN and converted SNN when simulated on PyNN
     }
 
     config['output'] = {
