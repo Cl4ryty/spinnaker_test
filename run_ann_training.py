@@ -6,18 +6,47 @@ import dill as pickle
 import os
 import time
 
-from snntoolbox.bin.run import main
-from snntoolbox.utils.utils import import_configparser
+import seaborn as sns
 
-# WORKING DIRECTORY #
-#####################
+sns.set(font='Franklin Gothic Book',
+        rc={
+            'axes.axisbelow': False,
+            'axes.edgecolor': 'lightgrey',
+            'axes.facecolor': 'None',
+            'axes.grid': False,
+            'axes.labelcolor': 'dimgrey',
+            'axes.spines.right': False,
+            'axes.spines.top': False,
+            'figure.facecolor': 'white',
+            'lines.solid_capstyle': 'round',
+            'patch.edgecolor': 'w',
+            'patch.force_edgecolor': True,
+            'text.color': 'dimgrey',
+            'xtick.bottom': False,
+            'xtick.color': 'dimgrey',
+            'xtick.direction': 'out',
+            'xtick.top': False,
+            'ytick.color': 'dimgrey',
+            'ytick.direction': 'out',
+            'ytick.left': False,
+            'ytick.right': False,
+            'figure.autolayout': True})
 
-# Define path where model and output files will be stored.
-# The user is responsible for cleaning up this temporary directory.
-path_wd = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(
-    __file__)), 'temp', str(time.time())))
-os.makedirs(path_wd)
+sns.set_context("notebook", rc={"font.size": 16,
+                                "axes.titlesize": 20,
+                                "axes.labelsize": 16})
 
+
+# for prettier plots
+CB91_Blue = '#2CBDFE'
+CB91_Green = '#47DBCD'
+CB91_Pink = '#F3A0F2'
+CB91_Purple = '#9D2EC5'
+CB91_Violet = '#661D98'
+CB91_Amber = '#F5B14C'
+color_list = [CB91_Blue, CB91_Pink, CB91_Green, CB91_Amber,
+              CB91_Purple, CB91_Violet]
+plt.rcParams['axes.prop_cycle'] = plt.cycler(color=color_list)
 
 # create sequential model -> not actually used as the model is set again in before the training
 ns = 10
@@ -163,7 +192,7 @@ gompertz = DE(name="gompertz", input_min=-2., input_max=2.,
               solution=lambda x: tf.exp(1.))
 # equations.append(gompertz)
 
-# Kirchhoff’s law
+# Kirchhoff's law
 # dürfte keinen Sinn ergeben, da zwei verschränkte Gleichungen verwendet werden: E(t) & I(t)
 # pürfen, ob Ergebnis plausibel
 L = 4
@@ -229,6 +258,28 @@ second_2 = DE(name="second_2", input_min=-2., input_max=2.,
               solution=lambda t: tf.cos(t) + tf.sin(t))
 equations.append(second_2)
 
+# TODO add ics, check solution
+# 2t²y'' + 3ty' − y = 0
+new_2nd_linear_1 = DE(name="new_2nd_linear_1", input_min=1., input_max=5.,
+                      eq=lambda df_dx, df_dxx, f, x: 2 * (x ** 2) * df_dxx + 3 * x * df_dx - f,
+                      order=2, ic_x=[4], ic_y=[2],
+                      solution=lambda x: x ** (1 / 2))
+equations.append(new_2nd_linear_1)
+
+# y'' + 3y' - 10y = 0
+new_2nd_linear_2 = DE(name="new_2nd_linear_2", input_min=-2., input_max=2.,
+                      eq=lambda df_dx, df_dxx, f, x: df_dxx + 3 * df_dx - 10 * f,
+                      order=2, ic_x=[0.], ic_y=[1.],
+                      solution=lambda x: (8 / 7) * tf.exp(2 * x) + (-1 / 7) * tf.exp(-5 * x))
+equations.append(new_2nd_linear_2)
+
+# y″ + 5y′ + 4y = 0
+new_2nd_linear_3 = DE(name="new_2nd_linear_3", input_min=-2., input_max=2.,
+                      eq=lambda df_dx, df_dxx, f, x: df_dx + 5 * df_dx + 4 * f,
+                      order=2, ic_x=[0.], ic_y=[1.],
+                      solution=lambda x: -1 * tf.exp(-x) + 2 * tf.exp(-4 * x))
+equations.append(new_2nd_linear_3)
+
 # # ------------------   third order ---------------------------
 
 
@@ -280,28 +331,41 @@ equations.append(nonlinear)
 # Painlevé II transcendent: w'' = 2w^3 + zw + α
 alpha = 3.
 painleve_2_transcendent = DE(name="painleve_2_transcendent", input_min=-2., input_max=2.,
-               eq=lambda df_dx, df_dxx, y, x: 2 * (y**3) + x*y + alpha,
-               order=2, ic_x=[4.7], ic_y=[0],
-               solution=lambda x:None)
+                             eq=lambda df_dx, df_dxx, y, x: 2 * (y ** 3) + x * y + alpha,
+                             order=2, ic_x=[4.7], ic_y=[0],
+                             solution=lambda x: None)
 equations.append(painleve_2_transcendent)
 
 second_order_nonlinear = DE(name="second_order_nonlinear", input_min=-2., input_max=2.,
-               eq=lambda df_dx, df_dxx, f, x: -2. * x * (df_dx ** 2),
-               order=2, ic_x=[0], ic_y=[2],
-               solution=lambda x: 0.5 * (tf.math.log(tf.abs(x - 1.)) - tf.math.log(tf.abs(x + 1.))) + 2.)
+                            eq=lambda df_dx, df_dxx, f, x: -2. * x * (df_dx ** 2),
+                            order=2, ic_x=[0], ic_y=[2],
+                            solution=lambda x: 0.5 * (tf.math.log(tf.abs(x - 1.)) - tf.math.log(tf.abs(x + 1.))) + 2.)
 equations.append(second_order_nonlinear)
 
 # TODO: check ic
 mu = 1.
 van_der_pol = DE(name="van_der_pol", input_min=0., input_max=2,
-                 eq=lambda dfdt, dfdtt, x, t: dfdtt - mu*(1-x**2)*dfdt + x,
+                 eq=lambda dfdt, dfdtt, x, t: dfdtt - mu * (1 - x ** 2) * dfdt + x,
                  order=2, ic_x=[0], ic_y=[2.],
-                 solution=lambda x:None)
+                 solution=lambda x: None)
 equations.append(van_der_pol)
+
+# y'' + 3y²y' = 0 for y(1) = 2 , y'(1) = 1
+new_2nd_nonlinear_1 = DE(name="new_2nd_nonlinear_1", input_min=0., input_max=2,
+                         eq=lambda dfdt, dfdtt, f, t: dfdtt + 3 * (f ** 2) * dfdt,
+                         order=2, ic_x=[1.], ic_y=[2.],
+                         solution=lambda x: x + 1)
+
+# y''/y'² + y'(e^y) = 0 for y(0) = 0, y'(0) = 1
+new_2nd_nonlinear_2 = DE(name="new_2nd_nonlinear_2", input_min=0., input_max=2,
+                         eq=lambda dfdt, dfdtt, f, t: (dfdtt / (dfdt ** 2)) + dfdt * tf.exp(f),
+                         order=2, ic_x=[0.], ic_y=[0.],
+                         solution=lambda x: tf.math.log(x + 1))
+equations.append(new_2nd_nonlinear_2)
 
 # # ------------------------   third order   -----------------------------------
 
-# third_order_nonlin, y′′′+(y′)^2−yy′′=0 
+# third_order_nonlin, y′′′+(y′)^2−yy′′=0
 # x undefiniert, könnte zu Probemen führen. sind aber atsächlich  gleicvhverteielte x-Werte
 third_order_nonlin = DE(name="third_order_nonlin", input_min=0., input_max=1.,
                         eq=lambda dy_dt, dy_dtt, dy_dttt, y, x: dy_dttt + tf.math.pow(dy_dt, 2) - y * dy_dtt,
@@ -322,240 +386,384 @@ third_order_v2 = DE(name="third_order_v2", input_min=0., input_max=1.,
                             (1 - (tf.math.log(x)) ** 2) * tf.math.atan(tf.math.log(x)) + tf.math.log(
                         x) * tf.math.log((1 + (tf.math.log(x)) ** 2) - (tf.math.log(x))))))
 equations.append(third_order_v2)
-
 # ----------------------------------------------------------------------------------------------------------------------
 ########################################################################################################################
 # ----------------------------------------------------------------------------------------------------------------------
 
 # set the hyperparameters
-epochs = 10000
+epochs = 200
 learning_rate = 0.01
-loss_threshold = 0.00001
+loss_threshold = 0.01
+num_runs = 2  # number of consecutive runs to calculate metrics over time measurements
 
-# lists for storing results
-final_losses = []
-final_errors = []
-de_names = []
+# WORKING DIRECTORY #
+# Define path where model and output files will be stored.
+# The user is responsible for cleaning up this temporary directory.
+top_path = os.path.abspath(os.path.join(os.getcwd(), 'temp', str(time.time())))
+os.makedirs(top_path)
 
-first_epoch_under_threshold = []
-time_to_threshold = []
-total_training_time = []
+if num_runs <= 1:
+    # assume that one run should be executed
+    num_runs = 1
+    # use the already created directory
+    path_wd = top_path
 
-functions_dict = {}
+list_of_run_metrics = []
 
-input_size = 400
-seed = 42
+for run_num in range(num_runs):
+    if num_runs > 1:
+        # create subdirectory for each run
+        path_wd = os.path.abspath(os.path.join(top_path, str(run_num)))
+        os.makedirs(path_wd)
 
-# create directory for the plots
-try:
-    os.makedirs(os.path.join(path_wd, "plots"))
-except FileExistsError:
-    # directory already exists
-    pass
+    # lists for storing results
+    final_losses = []
+    final_errors = []
+    de_names = []
 
-# create directory for the losses
-try:
-    os.makedirs(os.path.join(path_wd, "train_losses"))
-except FileExistsError:
-    # directory already exists
-    pass
+    first_epoch_under_threshold = []
+    time_to_threshold = []
+    total_training_time = []
 
-# create directory for the errors
-try:
-    os.makedirs(os.path.join(path_wd, "train_errors"))
-except FileExistsError:
-    # directory already exists
-    pass
+    functions_dict = {}
 
+    input_size = 400
+    seed = 42
 
-# save the hyperparameters
-hyperparameters = []
-hyperparameters.append(("epochs", epochs))
-hyperparameters.append(("learning_rate", learning_rate))
-hyperparameters.append(("loss_threshold", loss_threshold))
-hyperparameters.append(("input_size", input_size))
-hyperparameters.append(("seed", seed))
-hyperparameters = np.array(hyperparameters)
-np.savetxt(os.path.join(path_wd, "hyperparameters.txt"), hyperparameters, fmt="%s", delimiter=",")
+    # create directory for the plots
+    try:
+        os.makedirs(os.path.join(path_wd, "plots"))
+    except FileExistsError:
+        # directory already exists
+        pass
 
-# create RMSE function object for later use
-rmse = tf.keras.metrics.RootMeanSquaredError()
+    # create directory for the losses
+    try:
+        os.makedirs(os.path.join(path_wd, "train_losses"))
+    except FileExistsError:
+        # directory already exists
+        pass
 
-# run the training and conversion for all DEs
-for i, de in enumerate(equations):
-    print("\n\nWorking on " + de.name + ", equation", i, "of", len(equations) - 1)
-    # save the loss function in the dict
-    functions_dict[de.name] = de.get_loss_function()
+    # create directory for the errors
+    try:
+        os.makedirs(os.path.join(path_wd, "train_errors"))
+    except FileExistsError:
+        # directory already exists
+        pass
 
-    # get the loss function and inputs from the DE object
-    loss_function = de.get_loss_function()
-    x = de.get_inputs(input_size)
+    # save the hyperparameters
+    hyperparameters = []
+    hyperparameters.append(("epochs", epochs))
+    hyperparameters.append(("learning_rate", learning_rate))
+    hyperparameters.append(("loss_threshold", loss_threshold))
+    hyperparameters.append(("input_size", input_size))
+    hyperparameters.append(("seed", seed))
+    hyperparameters = np.array(hyperparameters)
+    np.savetxt(os.path.join(path_wd, "hyperparameters.txt"), hyperparameters, fmt="%s", delimiter=",")
 
-    # Save dataset so SNN toolbox can find it.
-    np.savez_compressed(os.path.join(path_wd, 'x_test'), x)
-    np.savez_compressed(os.path.join(path_wd, 'y_test'), x)
+    # create RMSE function object for later use
+    rmse = tf.keras.metrics.RootMeanSquaredError()
 
-    # initialize the model and optimizer
-    ns = 10
-    model = tf.keras.Sequential([tf.keras.layers.Dense(units=ns, activation=tf.nn.silu,
-                                                       kernel_initializer=tf.random_normal_initializer(seed=seed),
-                                                       bias_initializer=tf.random_normal_initializer(seed=seed),
-                                                       name="first",
-                                                       input_shape=(1,)),
-                                 tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
-                                                       kernel_initializer=tf.random_normal_initializer(seed=seed),
-                                                       bias_initializer=tf.random_normal_initializer(seed=seed),
-                                                       name="second"),
-                                 tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
-                                                       kernel_initializer=tf.random_normal_initializer(seed=seed),
-                                                       bias_initializer=tf.random_normal_initializer(seed=seed),
-                                                       name="third"),
-                                 tf.keras.layers.Dense(units=1, activation=tf.nn.selu,
-                                                       kernel_initializer=tf.random_normal_initializer(seed=seed),
-                                                       bias_initializer=tf.random_normal_initializer(seed=seed),
-                                                       name="fourth")
+    # run the training and conversion for all DEs
+    for i, de in enumerate(equations):
+        print("\n\nWorking on " + de.name + ", equation", i, "of", len(equations) - 1)
+        # save the loss function in the dict
+        functions_dict[de.name] = de.get_loss_function()
 
-                                 ])
+        # get the loss function and inputs from the DE object
+        loss_function = de.get_loss_function()
+        x = de.get_inputs(input_size)
 
-    # store the model's activation functions for easier replication
-    with open(os.path.join(path_wd, 'activations.txt'), 'w') as f:
-        for layer in model.layers:
+        # Save dataset so SNN toolbox can find it.
+        np.savez_compressed(os.path.join(path_wd, 'x_test'), x)
+        np.savez_compressed(os.path.join(path_wd, 'y_test'), x)
+
+        # initialize the model and optimizer
+        ns = 10
+        model = tf.keras.Sequential([tf.keras.layers.Dense(units=ns, activation=tf.nn.silu,
+                                                           kernel_initializer=tf.random_normal_initializer(seed=seed),
+                                                           bias_initializer=tf.random_normal_initializer(seed=seed),
+                                                           name="first",
+                                                           input_shape=(1,)),
+                                     tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
+                                                           kernel_initializer=tf.random_normal_initializer(seed=seed),
+                                                           bias_initializer=tf.random_normal_initializer(seed=seed),
+                                                           name="second"),
+                                     tf.keras.layers.Dense(units=ns, activation=tf.nn.sigmoid,
+                                                           kernel_initializer=tf.random_normal_initializer(seed=seed),
+                                                           bias_initializer=tf.random_normal_initializer(seed=seed),
+                                                           name="third"),
+                                     tf.keras.layers.Dense(units=1, activation=tf.nn.selu,
+                                                           kernel_initializer=tf.random_normal_initializer(seed=seed),
+                                                           bias_initializer=tf.random_normal_initializer(seed=seed),
+                                                           name="fourth")
+
+                                     ])
+
+        # store the model's activation functions for easier replication
+        with open(os.path.join(path_wd, 'activations.txt'), 'w') as f:
+            for layer in model.layers:
+                try:
+                    print(layer.activation, file=f)
+                except:  # some layers don't have any activation
+                    pass
+
+        optimizer = tf.keras.optimizers.Adam(learning_rate)
+
+        model.compile(optimizer, test_de.get_loss_function())
+        print(model.summary())
+
+        # Initialize lists for later visualization.
+        train_losses = []
+        train_errors = []
+
+        under_threshold = False
+
+        start_time = time.process_time()
+
+        # We train for epochs.
+        for epoch in range(epochs):
+            # print the current loss every 100 epochs to check if training is working
+            if epoch % 100 == 0:
+                f = model(x)
+                print(f'Epoch: {str(epoch)} starting with loss {loss_function(x, f)}')
+
+            # run training and store the loss
+            train_loss = training_step(model, x, loss_function, optimizer)
+            train_losses.append(tf.squeeze(train_loss))
+
+            # calculate error and store it
+            # only possible if solution is not None
             try:
-                print(layer.activation, file=f)
-            except:  # some layers don't have any activation
+                approx = tf.squeeze(model(x))
+                solution = tf.squeeze(de.analytical_solution(tf.squeeze(x)))
+                error = rmse(approx, solution).numpy()
+                train_errors.append(error)
+            except ValueError:
                 pass
 
-    optimizer = tf.keras.optimizers.Adam(learning_rate)
+            # check if loss is under threshold
+            if tf.squeeze(train_loss) < loss_threshold and not under_threshold:
+                time_to_threshold.append(time.process_time() - start_time)
+                first_epoch_under_threshold.append(epoch)
+                under_threshold = True
 
-    model.compile(optimizer, test_de.get_loss_function())
-    print(model.summary())
+        # store total runtime and None for time to threshold if it was not reached (to have equal sized lists for all DEs)
+        total_training_time.append(time.process_time() - start_time)
+        if not under_threshold:
+            time_to_threshold.append(None)
+            first_epoch_under_threshold.append(None)
 
-    # Initialize lists for later visualization.
-    train_losses = []
-    train_errors = []
+        # save final loss + error
+        if train_errors:
+            final_errors.append(train_errors[-1])
+        else:
+            final_errors.append(None)
+        final_losses.append(train_losses[-1])
+        de_names.append(de.name)
 
-    under_threshold = False
+        # save the model
+        model_name = de.name
+        model.save(os.path.join(path_wd, model_name))
 
-    start_time = time.process_time()
+        # save train loss and train error to file for later evaulation
+        np.savetxt(os.path.join(path_wd, "train_losses", model_name + "-train_losses.txt"), np.array(train_losses),
+                   fmt="%s", delimiter=",")
+        np.savetxt(os.path.join(path_wd, "train_errors", model_name + "-train_errors.txt"), np.array(train_errors),
+                   fmt="%s", delimiter=",")
 
-    # We train for epochs.
-    for epoch in range(epochs):
-        # print the current loss every 100 epochs to check if training is working
-        if epoch % 100 == 0:
-            f = model(x)
-            print(f'Epoch: {str(epoch)} starting with loss {loss_function(x, f)}')
-
-        # run training and store the loss
-        train_loss = training_step(model, x, loss_function, optimizer)
-        train_losses.append(tf.squeeze(train_loss))
-
-        # calculate error and store it
-        # only possible if solution is not None
-        try:
-            approx = tf.squeeze(model(x))
-            solution = tf.squeeze(de.analytical_solution(tf.squeeze(x)))
-            error = rmse(approx, solution).numpy()
-            train_errors.append(error)
-        except ValueError:
-            pass
-
-        # check if loss is under threshold
-        if tf.squeeze(train_loss) < loss_threshold and not under_threshold:
-            time_to_threshold.append(time.process_time() - start_time)
-            first_epoch_under_threshold.append(epoch)
-            under_threshold = True
-
-    # store total runtime and None for time to threshold if it was not reached (to have equal sized lists for all DEs)
-    total_training_time.append(time.process_time() - start_time)
-    if not under_threshold:
-        time_to_threshold.append(None)
-        first_epoch_under_threshold.append(None)
-
-    # save final loss + error
-    if train_errors:
-        final_errors.append(train_errors[-1])
-    else:
-        final_errors.append(None)
-    final_losses.append(train_losses[-1])
-    de_names.append(de.name)
-
-    # save the model
-    model_name = de.name
-    model.save(os.path.join(path_wd, model_name))
-
-    # save train loss and train error to file for later evaulation
-    np.savetxt(os.path.join(path_wd, "train_losses", model_name+"-train_losses.txt"), np.array(train_losses), fmt="%s", delimiter=",")
-    np.savetxt(os.path.join(path_wd, "train_errors", model_name+"-train_errors.txt"), np.array(train_errors), fmt="%s", delimiter=",")
-
-    # plot result
-    mpl.rcParams.update(mpl.rcParamsDefault)
-    plt.figure()
-    plt.plot(train_losses)
-    # if train_errors:
-    #     plt.plot(train_errors, label="RMSE")
-    plt.xlabel("Training steps")
-    plt.ylabel("Loss")
-    plt.title(de.name)
-    plt.legend()
-
-    figname = de.name + "__loss.png"
-    plt.savefig(os.path.join(path_wd, "plots", figname))
-    plt.show(block=False)
-    plt.pause(0.001)
-
-    # plot result
-    if train_errors:
-        mpl.rcParams.update(mpl.rcParamsDefault)
+        # plot result
         plt.figure()
-        plt.plot(train_errors)
+        plt.plot(train_losses)
+        # if train_errors:
+        #     plt.plot(train_errors, label="RMSE")
         plt.xlabel("Training steps")
-        plt.ylabel("RMSE")
+        plt.ylabel("Loss")
         plt.title(de.name)
-        plt.legend()
 
-        figname = de.name + "__error.png"
+        figname = de.name + "__loss.png"
         plt.savefig(os.path.join(path_wd, "plots", figname))
         plt.show(block=False)
         plt.pause(0.001)
 
-    # plot the model's approximation and the actual solution
-    approx = model(x)
-    plt.plot(tf.squeeze(x), tf.squeeze(approx), label="model's solution")
-    try:
-        plt.plot(tf.squeeze(x), tf.squeeze(de.analytical_solution(tf.squeeze(x))), label="true solution",
-                 linestyle="dashed")
-    except ValueError:
-        pass
-    plt.legend()
-    plt.title(de.name)
+        # plot result
+        if train_errors:
+            plt.figure()
+            plt.plot(train_errors)
+            plt.xlabel("Training steps")
+            plt.ylabel("RMSE")
+            plt.title(de.name)
 
-    figname = de.name + "__solution.png"
-    plt.savefig(os.path.join(path_wd, "plots", figname))
-    plt.show(block=False)
-    plt.pause(0.001)
+            figname = de.name + "__error.png"
+            plt.savefig(os.path.join(path_wd, "plots", figname))
+            plt.show(block=False)
+            plt.pause(0.001)
 
-    # print and store the dictionary with the loss functions
-    print("dictionary:", functions_dict)
-    dict_file_name = 'serialized_custom_loss_functions.txt'
-    f = open(os.path.join(path_wd, dict_file_name), 'wb')  # opened the file in write and binary mode
-    pickle.dump(functions_dict, f)  # dumping the content in the variable 'content' into the file
-    f.close()  # closing the file
+        # plot the model's approximation and the actual solution
+        approx = model(x)
+        plt.plot(tf.squeeze(x), tf.squeeze(approx), label="model's solution")
+        try:
+            plt.plot(tf.squeeze(x), tf.squeeze(de.analytical_solution(tf.squeeze(x))), label="true solution",
+                     linestyle="dashed")
+        except ValueError:
+            pass
+        plt.legend()
+        plt.title(de.name)
 
+        figname = de.name + "__solution.png"
+        plt.savefig(os.path.join(path_wd, "plots", figname))
+        plt.show(block=False)
+        plt.pause(0.001)
 
+        # print and store the dictionary with the loss functions
+        print("dictionary:", functions_dict)
+        dict_file_name = 'serialized_custom_loss_functions.txt'
+        f = open(os.path.join(path_wd, dict_file_name), 'wb')  # opened the file in write and binary mode
+        pickle.dump(functions_dict, f)  # dumping the content in the variable 'content' into the file
+        f.close()  # closing the file
 
-# create an array with all final losses + errors and de names
-final_losses = np.array(final_losses)
-final_errors = np.array(final_errors)
-de_names = np.array(de_names)
-time_to_threshold = np.array(time_to_threshold)
-total_training_time = np.array(total_training_time)
-first_epoch_under_threshold = np.array(first_epoch_under_threshold)
+    # create an array with all final losses + errors and de names
+    final_losses = np.array(final_losses)
+    final_errors = np.array(final_errors)
+    de_names = np.array(de_names)
+    time_to_threshold = np.array(time_to_threshold)
+    total_training_time = np.array(total_training_time)
+    first_epoch_under_threshold = np.array(first_epoch_under_threshold)
 
-metrics = np.array(
-    [de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, total_training_time]).T
+    metrics = np.array(
+        [de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, total_training_time]).T
 
-# save metrics as file
-np.savetxt(os.path.join(path_wd, "metrics.txt"), metrics, fmt="%s", delimiter=",")
+    list_of_run_metrics.append(metrics)
 
-# show all plots in the end when running as script
-plt.show()
+    # save metrics as file
+    np.savetxt(os.path.join(path_wd, "metrics.txt"), metrics, fmt="%s", delimiter=",",
+               header="de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, "
+                      "total_training_time")
+
+    # show all plots in the end when running as script
+    plt.show()
+
+# calculate time metrics for all runs
+
+# stack the metrics arrays of all runs
+time_metrics = np.stack(list_of_run_metrics)
+
+# save array for later use
+np.save(os.path.join(top_path, "run_metrics"), time_metrics)
+
+# get only the time metrics
+time_metrics = np.array(time_metrics[:, :, -2:], dtype=float)
+
+means = np.mean(time_metrics, axis=0)
+medians = np.median(time_metrics, axis=0)
+mins = np.min(time_metrics, axis=0)
+maxs = np.max(time_metrics, axis=0)
+
+# create directory for the plots
+try:
+    os.makedirs(os.path.join(top_path, "plots"))
+except FileExistsError:
+    # directory already exists
+    pass
+
+# plots for total training times
+plt.figure(figsize=(15, 8))
+plt.boxplot(time_metrics[:, :, 1].T.tolist(), labels=de_names)
+plt.ylabel("Total training time")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Total_training_times.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, means[:, 1])
+plt.ylabel("Mean total training time")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Mean_total_training_times.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, medians[:, 1])
+plt.ylabel("Median total training time")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Median_total_training_times.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, mins[:, 1])
+plt.ylabel("Min total training time")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Min_total_training_times.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, maxs[:, 1])
+plt.ylabel("Max total training time")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Max_total_training_times.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+# plots for times to loss under threshold
+plt.figure(figsize=(15, 8))
+plt.boxplot(time_metrics[:, :, 0].T.tolist(), labels=de_names)
+plt.ylabel("Times to threshold")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Times_to_threshold.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, means[:, 0])
+plt.ylabel("Mean time to threshold")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Mean_time_to_threshold.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, medians[:, 0])
+plt.ylabel("Median time to threshold")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Median_time_to_threshold.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, mins[:, 0])
+plt.ylabel("Min time to threshold")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Min_time_to_threshold.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
+
+plt.figure(figsize=(15, 8))
+plt.bar(de_names, maxs[:, 0])
+plt.ylabel("Max time to threshold")
+plt.xlabel("DEs")
+plt.xticks(rotation=30, ha='right')
+figname = "Max_time_to_threshold.png"
+plt.savefig(os.path.join(top_path, "plots", figname))
+plt.show(block=False)
+plt.pause(0.001)
