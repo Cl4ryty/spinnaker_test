@@ -13,8 +13,8 @@ sim.setup(timestep=1.0, min_delay=1.0)
 
 path = "snn_test"
 print(os.getcwd())
-os.chdir(path)
-files = sorted(os.listdir())
+# os.chdir(path)
+files = sorted(os.listdir(path))
 print("layer files:", files)
 
 layers = []
@@ -39,14 +39,14 @@ for i in range(len(files)//2):
     # create next layer
     if i < len(files) - 2:
         # get number of neurons from file -> number between _ _
-        result = re.search('_(.*)_', files[i+2])
+        result = re.search('_(.*)_', files[i*2])
         ns = int(result.group(1))
         print(ns, "ns in layer", i + 2 / 2)
-    else:
-        # use the number of neurons of this layer
-        result = re.search('_(.*)_', files[i])
-        ns = int(result.group(1))
-        print(ns, "ns in layer", i / 2)
+    # else:
+    #     # use the number of neurons of this layer
+    #     result = re.search('_(.*)_', files[i])
+    #     ns = int(result.group(1))
+    #     print(ns, "ns in layer", i / 2)
 
     layer2 = sim.Population(ns, sim.IF_cond_exp(**cell_params))
 
@@ -65,8 +65,9 @@ for i in range(len(files)//2):
     layers.append(layer2)
 
     # create projections for exitatory an inhibitory connections
-    sim.Projection(layer1, layer2, sim.FromFileConnector(files[i]))
-    sim.Projection(layer1, layer2, sim.FromFileConnector(files[i+1]))
+    print("connection from layer", i, "to", i+1, files[2*i], files[2*i+1])
+    sim.Projection(layer1, layer2, sim.FromFileConnector(os.path.join(path,files[2*i])))
+    sim.Projection(layer1, layer2, sim.FromFileConnector(os.path.join(path,files[2*i+1])))
 
 
 
