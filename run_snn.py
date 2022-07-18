@@ -1,22 +1,21 @@
 import os
 import re
-
+import numpy as np
+from matplotlib import pyplot as plt
 import pyNN.spiNNaker as sim
+
+sim.setup(timestep=1.0, min_delay=1.0)
 
 # load /build model for each de
 
 # TODO save the files for each de in a specific folder
 # navigate to the respective folder
-import numpy as np
-from matplotlib import pyplot as plt
 
 path = "snn_test"
 print(os.getcwd())
 os.chdir(path)
 files = sorted(os.listdir())
 print("layer files:", files)
-
-sim.setup(timestep=1.0, min_delay=1.0)
 
 layers = []
 
@@ -76,7 +75,7 @@ layers[-1].record('spikes')
 
 # set the inputs
 sim_duration = 10.0 # seconds
-num_inputs = 20
+num_inputs = 1
 inputs = np.arange(num_inputs, dtype=int)
 
 results = []
