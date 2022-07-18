@@ -7,10 +7,11 @@ import pyNN.spiNNaker as sim
 
 # TODO save the files for each de in a specific folder
 # navigate to the respective folder
-from flatbuffers.builder import np
+import numpy as np
 from matplotlib import pyplot as plt
 
 path = "snn_test"
+print(os.getcwd())
 os.chdir(path)
 files = sorted(os.listdir())
 print("layer files:", files)
