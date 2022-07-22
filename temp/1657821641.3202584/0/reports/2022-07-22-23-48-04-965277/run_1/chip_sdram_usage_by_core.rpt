@@ -1,0 +1,50 @@
+        Memory Usage by Core
+        ====================
+
+Generated: Fri Jul 22 23:48:06 2022 for target machine 'virtual'
+
+Planned by partitioner
+----------------------
+Based on 1000 timesteps
+
+SDRAM reqs for core (0,0,3) is 52 KB (53256 bytes) for Placement(vertex=0Dense_10:0:9, x=0, y=0, p=3)
+SDRAM reqs for core (0,0,4) is 52 KB (53942 bytes) for Placement(vertex=1Dense_10:0:9, x=0, y=0, p=4)
+SDRAM reqs for core (0,0,5) is 52 KB (54065 bytes) for Placement(vertex=2Dense_10:0:9, x=0, y=0, p=5)
+SDRAM reqs for core (0,0,6) is 16 KB (16929 bytes) for Placement(vertex=3Dense_1:0:0, x=0, y=0, p=6)
+SDRAM reqs for core (0,0,7) is 10 KB (10242 bytes) for Placement(vertex=InputLayer:0:0, x=0, y=0, p=7)
+SDRAM reqs for core (0,0,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor, x=0, y=0, p=1)
+SDRAM reqs for core (0,1,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor1, x=0, y=1, p=1)
+SDRAM reqs for core (1,0,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor2, x=1, y=0, p=1)
+SDRAM reqs for core (1,1,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor3, x=1, y=1, p=1)
+SDRAM reqs for core (0,0,2) is 459 KB (470200 bytes) for Placement(vertex=SYSTEM:PacketGatherer(0,0), x=0, y=0, p=2)
+**** Chip: (0, 0) has total memory usage of 1119 KB (1146770 bytes) out of a max of 119808 KB (122683392 bytes)
+
+**** Chip: (0, 1) has total memory usage of 476 KB (488136 bytes) out of a max of 119808 KB (122683392 bytes)
+
+**** Chip: (1, 0) has total memory usage of 476 KB (488136 bytes) out of a max of 119808 KB (122683392 bytes)
+
+**** Chip: (1, 1) has total memory usage of 476 KB (488136 bytes) out of a max of 119808 KB (122683392 bytes)
+
+
+Actual space reserved on the machine
+----------------------
+Based on 668783 timesteps
+
+SDRAM reqs for core (0,0,3) is 33962 KB (34777972 bytes) for Placement(vertex=0Dense_10:0:9, x=0, y=0, p=3)
+SDRAM reqs for core (0,0,4) is 33963 KB (34778658 bytes) for Placement(vertex=1Dense_10:0:9, x=0, y=0, p=4)
+SDRAM reqs for core (0,0,5) is 33963 KB (34778781 bytes) for Placement(vertex=2Dense_10:0:9, x=0, y=0, p=5)
+SDRAM reqs for core (0,0,6) is 10450 KB (10701457 bytes) for Placement(vertex=3Dense_1:0:0, x=0, y=0, p=6)
+SDRAM reqs for core (0,0,7) is 6531 KB (6688072 bytes) for Placement(vertex=InputLayer:0:0, x=0, y=0, p=7)
+SDRAM reqs for core (0,0,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor, x=0, y=0, p=1)
+SDRAM reqs for core (0,1,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor1, x=0, y=1, p=1)
+SDRAM reqs for core (1,0,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor2, x=1, y=0, p=1)
+SDRAM reqs for core (1,1,1) is 476 KB (488136 bytes) for Placement(vertex=SYSTEM:ExtraMonitor3, x=1, y=1, p=1)
+SDRAM reqs for core (0,0,2) is 459 KB (470200 bytes) for Placement(vertex=SYSTEM:PacketGatherer(0,0), x=0, y=0, p=2)
+**** Chip: (0, 0) has total memory usage of 119807 KB (122683276 bytes) out of a max of 119808 KB (122683392 bytes)
+
+**** Chip: (0, 1) has total memory usage of 476 KB (488136 bytes) out of a max of 119808 KB (122683392 bytes)
+
+**** Chip: (1, 0) has total memory usage of 476 KB (488136 bytes) out of a max of 119808 KB (122683392 bytes)
+
+**** Chip: (1, 1) has total memory usage of 476 KB (488136 bytes) out of a max of 119808 KB (122683392 bytes)
+

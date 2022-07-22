@@ -1,0 +1,14 @@
+Vertex: InputLayer:0:0
+    Partition: SPIKE, Routing Info: [KeyAndMask:0x0:0xffffffff]
+Vertex: 0Dense_10:0:9
+    Partition: SPIKE, Routing Info: [KeyAndMask:0x10:0xfffffff0]
+Vertex: 1Dense_10:0:9
+    Partition: SPIKE, Routing Info: [KeyAndMask:0x20:0xfffffff0]
+Vertex: 2Dense_10:0:9
+    Partition: SPIKE, Routing Info: [KeyAndMask:0x30:0xfffffff0]
+Vertex: 3Dense_1:0:0
+Vertex: SYSTEM:ExtraMonitor
+Vertex: SYSTEM:ExtraMonitor1
+Vertex: SYSTEM:ExtraMonitor2
+Vertex: SYSTEM:ExtraMonitor3
+Vertex: SYSTEM:PacketGatherer(0,0)

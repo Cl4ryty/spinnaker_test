@@ -1,0 +1,2 @@
+# de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, total_training_time
+test_de,0.0020907363,0.21831767,58,1.26113051,3.0037262179999997

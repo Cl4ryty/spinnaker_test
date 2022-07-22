@@ -1,0 +1,32 @@
+Linux pop-os 5.17.15-76051715-generic #202206141358~1655919116~22.04~1db9e34 SMP PREEMPT Wed Jun 22 19 x86_64 x86_64 x86_64 GNU/Linux
+Tue Jul 12 11:59:05 2022       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.73.05    Driver Version: 510.73.05    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA GeForce ...  Off  | 00000000:01:00.0  On |                  N/A |
+| N/A   62C    P2    25W /  N/A |   2124MiB /  6144MiB |     16%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      3380      G   /usr/lib/xorg/Xorg               1346MiB |
+|    0   N/A  N/A      3498      G   /usr/bin/kwin_x11                 220MiB |
+|    0   N/A  N/A      3556      G   /usr/bin/plasmashell               58MiB |
+|    0   N/A  N/A      3674      G   /usr/lib/firefox/firefox          393MiB |
+|    0   N/A  N/A      3700      G   /usr/bin/konqueror                  1MiB |
+|    0   N/A  N/A      3752      G   ...akonadi_archivemail_agent        1MiB |
+|    0   N/A  N/A      3761      G   .../akonadi_mailfilter_agent        1MiB |
+|    0   N/A  N/A      3781      G   ...n/akonadi_sendlater_agent        1MiB |
+|    0   N/A  N/A      3782      G   ...nadi_unifiedmailbox_agent        1MiB |
+|    0   N/A  N/A      4138      G   /usr/bin/latte-dock                40MiB |
+|    0   N/A  N/A     13852      G   /usr/bin/plasma-discover           13MiB |
+|    0   N/A  N/A     15887      G   ...AAAAAAAAA= --shared-files       31MiB |
++-----------------------------------------------------------------------------+

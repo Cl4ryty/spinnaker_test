@@ -1,0 +1,35 @@
+        Placement Information by Vertex
+        ===============================
+
+Generated: Fri Jul 22 23:56:41 2022 for target machine 'virtual'
+
+**** Vertex: 'InputLayer'
+Model: SpikeSourceArrayVertex
+Pop size: 1
+Machine Vertices: 
+  Slice 0:0 (1 atoms) 
+
+**** Vertex: '0Dense_10'
+Model: AbstractPopulationVertex
+Pop size: 10
+Machine Vertices: 
+  Slice 0:9 (10 atoms) 
+
+**** Vertex: '1Dense_10'
+Model: AbstractPopulationVertex
+Pop size: 10
+Machine Vertices: 
+  Slice 0:9 (10 atoms) 
+
+**** Vertex: '2Dense_10'
+Model: AbstractPopulationVertex
+Pop size: 10
+Machine Vertices: 
+  Slice 0:9 (10 atoms) 
+
+**** Vertex: '3Dense_1'
+Model: AbstractPopulationVertex
+Pop size: 1
+Machine Vertices: 
+  Slice 0:0 (1 atoms) 
+

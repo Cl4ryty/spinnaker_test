@@ -1,0 +1,4 @@
+# de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, total_training_time
+test_de,0.00032557238591834903,0.24993932247161865,None,None,3.1699572320000016
+kirchhoff,0.0779058188199997,6.197762489318848,None,None,4.4437693110000005
+newtons_first,33.134178161621094,10.255998611450195,None,None,4.285728707999997
