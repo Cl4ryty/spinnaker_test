@@ -24,5 +24,5 @@ model_lib = keras
 v_thresh = 0.01
 
 [output]
-plot_vars = {'v_mem', 'error_t', 'correlation', 'spikerates', 'spiketrains', 'activations'}
+plot_vars = {'correlation', 'activations', 'spiketrains', 'v_mem', 'spikerates', 'error_t'}
 

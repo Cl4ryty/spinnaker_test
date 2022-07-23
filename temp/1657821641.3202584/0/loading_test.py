@@ -1,8 +1,8 @@
 import os
 import numpy as np
-import tensorflow as tf
-import dill as pickle
-import matplotlib.pyplot as plt
+# import tensorflow as tf
+# import dill as pickle
+# import matplotlib.pyplot as plt
 from snntoolbox.bin.run import main
 from snntoolbox.utils.utils import import_configparser
 
@@ -11,17 +11,17 @@ file_path = "test_de"
 
 # get dict entry (loss function)
 
-f = open('serialized_custom_loss_functions.txt', 'rb')  # opened the file in write and binary mode
-reconstructed_dict = pickle.load(f)  # dumping the content in the variable 'content' into the file
-f.close()  # closing the file
+# f = open('serialized_custom_loss_functions.txt', 'rb')  # opened the file in write and binary mode
+# reconstructed_dict = pickle.load(f)  # dumping the content in the variable 'content' into the file
+# f.close()  # closing the file
 
-m = tf.keras.models.load_model(file_path, custom_objects={"ann_loss_function": reconstructed_dict[file_path]})
+# m = tf.keras.models.load_model(file_path, custom_objects={"ann_loss_function": reconstructed_dict[file_path]})
 
 
-x = tf.linspace(0., 2., num=3)
-x = tf.expand_dims(x, -1)
+x = np.linspace(0., 2., num=3)
+x = np.expand_dims(x, -1)
 
-x = tf.cast(x, tf.int32)
+x = x.astype(np.int)
 print("inputs", x)
 
 
@@ -30,11 +30,11 @@ print("inputs", x)
 np.savez_compressed('x_test', x)
 np.savez_compressed('y_test', x)
 
-test = m(x)
-# plot result
-plt.plot(tf.squeeze(x), tf.squeeze(m(x)))
-plt.savefig("ann_result.png")
-plt.show()
+# test = m(x)
+# # plot result
+# plt.plot(tf.squeeze(x), tf.squeeze(m(x)))
+# plt.savefig("ann_result.png")
+# plt.show()
 
 
 path_wd = os.getcwd()
