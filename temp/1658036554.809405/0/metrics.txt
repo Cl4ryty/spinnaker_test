@@ -1,2 +1,0 @@
-# de_names, final_losses, final_errors, first_epoch_under_threshold, time_to_threshold, total_training_time
-test_de,0.0003255724,0.24993932,100,1.7374691210000002,2.792031593
