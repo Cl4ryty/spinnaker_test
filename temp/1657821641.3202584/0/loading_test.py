@@ -33,6 +33,7 @@ np.savez_compressed('y_test', x)
 test = m(x)
 # plot result
 plt.plot(tf.squeeze(x), tf.squeeze(m(x)))
+plt.savefig("ann_result.png")
 plt.show()
 
 
