@@ -6,14 +6,9 @@ import pyNN.spiNNaker as sim
 
 sim.setup(timestep=1.0, min_delay=1.0)
 
-# load /build model for each de
-
-# TODO save the files for each de in a specific folder
 # navigate to the respective folder
-
 path = "snn_test"
 print(os.getcwd())
-# os.chdir(path)
 files = sorted(os.listdir(path))
 print("layer files:", files)
 
@@ -42,11 +37,6 @@ for i in range(len(files)//2):
         result = re.search('_(.*)_', files[i*2])
         ns = int(result.group(1))
         print(ns, "ns in layer", i + 2 / 2)
-    # else:
-    #     # use the number of neurons of this layer
-    #     result = re.search('_(.*)_', files[i])
-    #     ns = int(result.group(1))
-    #     print(ns, "ns in layer", i / 2)
 
     layer2 = sim.Population(ns, sim.IF_cond_exp(**cell_params))
 
@@ -94,19 +84,7 @@ for input in inputs:
     # run the simulation
     sim.run(sim_duration)
 
-
-
-    # retrieve recorded data
-    #
-    # def get_spiketrains_input(self):
-    #     shape = list(self.parsed_model.input_shape) + [self._num_timesteps]
-    #     spiketrains_flat = self.layers[0].get_data(
-    #         'spikes').segments[-1].spiketrains
-    #     spiketrains_b_l_t = self.reshape_flattened_spiketrains(
-    #         spiketrains_flat, shape)
-    #     return spiketrains_b_l_t
-
-
+    # get the output
     spike_counts = layers[-1].get_spike_counts()
     print("spike_counts", spike_counts)
     output_firing_rates = np.array(
@@ -121,5 +99,5 @@ results = results.flatten()
 plt.plot(np.arange(0,len(results)), results)
 plt.xlabel("x?")
 plt.ylabel("Output firing rate (spikes/second)")
-plt.show()
 plt.savefig("simple_example.png")
+plt.show()
