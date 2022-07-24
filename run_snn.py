@@ -66,7 +66,7 @@ layers[-1].record('spikes')
 
 # set the inputs
 sim_duration = 10.0 # seconds
-num_inputs = 1
+num_inputs = 3
 inputs = np.arange(num_inputs, dtype=int)
 
 results = []
